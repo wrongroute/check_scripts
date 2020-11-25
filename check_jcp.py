@@ -2,9 +2,11 @@ import docker
 from datetime import datetime
 
 client = docker.from_env()
-containers = client.containers.list()
 
 output = []
+cur_date = datetime.now()
+
+containers = client.containers.list()
 
 for item in containers:
   container = client.containers.get(item.id)
@@ -13,7 +15,6 @@ for item in containers:
   if (res[0] == 0):
     validity = res[1].split("\n")
     date = datetime.strptime(validity[6][16:], "%b %d, %Y")
-    cur_date = datetime.now()
     if (cur_date < date):
       state = 'Valid'
     else:
